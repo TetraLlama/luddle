@@ -33,16 +33,16 @@
   .wrap {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 32px 24px 80px;
+    padding: 18px 24px 18px;
   }
 
   header h1 {
-    font-size: 1.5rem;
-    margin: 0 0 4px;
+    font-size: 1.25rem;
+    margin: 0 0 2px;
     letter-spacing: 0.2px;
   }
   header p {
-    margin: 0 0 28px;
+    margin: 0 0 12px;
     color: var(--muted);
   }
 
@@ -51,22 +51,23 @@
     background: var(--panel);
     border: 1px solid var(--line);
     border-radius: 14px;
-    padding: 22px 26px;
-    margin-bottom: 32px;
+    padding: 14px 20px;
+    margin-bottom: 14px;
     box-shadow: 0 1px 0 rgba(0,0,0,0.02);
   }
   .groundwork h2 {
-    margin: 0 0 6px;
-    font-size: 1.15rem;
+    margin: 0 0 4px;
+    font-size: 1.05rem;
   }
   .groundwork .lede {
     color: var(--muted);
-    margin: 0 0 18px;
+    font-size: 0.88rem;
+    margin: 0 0 10px;
   }
   .groundwork-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 18px;
+    gap: 10px;
   }
   @media (min-width: 760px) {
     .groundwork-grid { grid-template-columns: 1fr 1fr 1fr; }
@@ -75,40 +76,41 @@
     background: #fbfaf6;
     border: 1px solid var(--line);
     border-radius: 10px;
-    padding: 14px 16px;
+    padding: 10px 14px;
+    font-size: 0.88rem;
   }
   .gw-block h3 {
-    margin: 0 0 8px;
-    font-size: 0.95rem;
+    margin: 0 0 5px;
+    font-size: 0.78rem;
     color: var(--accent-ink);
     text-transform: uppercase;
     letter-spacing: 0.6px;
   }
   .gw-block ul {
     margin: 0;
-    padding-left: 18px;
+    padding-left: 16px;
   }
-  .gw-block li { margin: 4px 0; }
+  .gw-block li { margin: 2px 0; }
   .gw-block .goal {
-    margin-top: 10px;
+    margin-top: 6px;
     font-style: italic;
     color: var(--muted);
   }
 
   /* Buttons grid */
   .moves-label {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1.8px;
     color: var(--ink);
-    margin: 6px 0 16px;
+    margin: 4px 0 10px;
     text-align: center;
   }
   .button-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: 10px;
   }
   @media (min-width: 600px) { .button-grid { grid-template-columns: repeat(3, 1fr); } }
   @media (min-width: 900px) { .button-grid { grid-template-columns: repeat(4, 1fr); } }
@@ -118,7 +120,7 @@
     background: var(--button-face);
     border: 1px solid var(--button-edge);
     border-radius: 14px;
-    padding: 22px 16px 20px;
+    padding: 14px 14px 12px;
     text-align: left;
     cursor: pointer;
     font-family: inherit;
@@ -127,7 +129,7 @@
       0 2px 0 var(--button-edge),
       0 6px 14px var(--button-shadow);
     transition: transform 80ms ease, box-shadow 120ms ease, border-color 120ms ease;
-    min-height: 120px;
+    min-height: 90px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -170,9 +172,9 @@
     transform: translateX(3px);
   }
   .move-btn .label {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
-    margin-top: 10px;
+    margin-top: 6px;
     transition: color 150ms ease;
   }
   .move-btn:hover .label {
@@ -187,7 +189,7 @@
   .move-btn .tap-hint {
     font-size: 0.75rem;
     color: var(--button-edge);
-    margin-top: 12px;
+    margin-top: 6px;
     transition: color 150ms ease;
   }
   .move-btn .tap-hint .arrow {
