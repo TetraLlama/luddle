@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Conversation Dashboard</title>
+<style>
+  :root {
+    --bg: #f4f1ec;
+    --panel: #ffffff;
+    --ink: #1f2430;
+    --muted: #5b6473;
+    --line: #e3ddd2;
+    --accent: #6b8e7f;
+    --accent-ink: #2d4a3e;
+    --button-face: #fafafa;
+    --button-edge: #d6cfc1;
+    --button-shadow: rgba(40, 30, 20, 0.18);
+    --modal-backdrop: rgba(20, 24, 30, 0.45);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.5;
+  }
+
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+    margin: 0 0 4px;
+    letter-spacing: 0.2px;
+  }
+  header p {
+    margin: 0 0 28px;
+    color: var(--muted);
+  }
+
+  /* Groundwork panel */
+  .groundwork {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-bottom: 32px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+  }
+  .groundwork h2 {
+    margin: 0 0 6px;
+    font-size: 1.15rem;
+  }
+  .groundwork .lede {
+    color: var(--muted);
+    margin: 0 0 18px;
+  }
+  .groundwork-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  @media (min-width: 760px) {
+    .groundwork-grid { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  .gw-block {
+    background: #fbfaf6;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .gw-block h3 {
+    margin: 0 0 8px;
+    font-size: 0.95rem;
+    color: var(--accent-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  .gw-block ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+  .gw-block li { margin: 4px 0; }
+  .gw-block .goal {
+    margin-top: 10px;
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  /* Buttons grid */
+  .moves-label {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--ink);
+    margin: 6px 0 16px;
+    text-align: center;
+  }
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  @media (min-width: 600px) { .button-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 900px) { .button-grid { grid-template-columns: repeat(4, 1fr); } }
+
+  .move-btn {
+    position: relative;
+    background: var(--button-face);
+    border: 1px solid var(--button-edge);
+    border-radius: 14px;
+    padding: 22px 16px 20px;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--ink);
+    box-shadow:
+      0 2px 0 var(--button-edge),
+      0 6px 14px var(--button-shadow);
+    transition: transform 80ms ease, box-shadow 120ms ease, border-color 120ms ease;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .move-btn:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow:
+      0 3px 0 var(--button-edge),
+      0 10px 18px var(--button-shadow);
+  }
+  .move-btn:active {
+    transform: translateY(1px);
+    box-shadow:
+      0 1px 0 var(--button-edge),
+      0 3px 6px var(--button-shadow);
+  }
+  .move-btn:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .move-btn .num {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--button-edge);
+    font-variant-numeric: tabular-nums;
+  }
+  .move-btn .corner-icon {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    font-size: 1.1rem;
+    color: var(--button-edge);
+    transition: color 150ms ease, transform 150ms ease;
+    line-height: 1;
+  }
+  .move-btn:hover .corner-icon {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+  .move-btn .label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: color 150ms ease;
+  }
+  .move-btn:hover .label {
+    color: var(--accent-ink);
+  }
+  .move-btn .hint {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 6px;
+    flex: 1;
+  }
+  .move-btn .tap-hint {
+    font-size: 0.75rem;
+    color: var(--button-edge);
+    margin-top: 12px;
+    transition: color 150ms ease;
+  }
+  .move-btn .tap-hint .arrow {
+    display: inline-block;
+    transition: transform 150ms ease;
+  }
+  .move-btn:hover .tap-hint {
+    color: var(--accent);
+  }
+  .move-btn:hover .tap-hint .arrow {
+    transform: translateX(4px);
+  }
+  .grid-instruction {
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin: -4px 0 18px;
+    font-style: italic;
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: var(--modal-backdrop);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 6vh 16px;
+    z-index: 50;
+    overflow-y: auto;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: var(--panel);
+    border-radius: 14px;
+    max-width: 720px;
+    width: 100%;
+    padding: 28px 30px 26px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    border: 1px solid var(--line);
+  }
+  .modal h2 {
+    margin: 0 0 4px;
+    font-size: 1.35rem;
+  }
+  .modal .subtitle {
+    color: var(--muted);
+    margin: 0 0 18px;
+  }
+  .modal .close {
+    float: right;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--muted);
+  }
+  .modal .close:hover { color: var(--ink); border-color: var(--ink); }
+  .modal h3 {
+    margin: 18px 0 6px;
+    font-size: 1rem;
+    color: var(--accent-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  .modal p { margin: 0 0 10px; }
+  .modal ul, .modal ol { margin: 6px 0 12px; padding-left: 22px; }
+  .modal li { margin: 4px 0; }
+  .modal blockquote {
+    margin: 10px 0;
+    padding: 8px 14px;
+    border-left: 3px solid var(--accent);
+    color: var(--muted);
+    background: #fbfaf6;
+    border-radius: 0 8px 8px 0;
+  }
+  .placeholder {
+    background: #fff8e6;
+    border: 1px dashed #d9c89a;
+    color: #6a5a25;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Conversation Dashboard</h1>
+    <p>Moves for deep, emotional, or challenging conversations.</p>
+  </header>
+
+  <section class="groundwork" aria-labelledby="gw-title">
+    <h2 id="gw-title">Groundwork of Understanding</h2>
+    <p class="lede">
+      Person A explains their experience, feelings, and desires. Person B reflects it back to check understanding.
+      Once A's point is understood, B can begin to respond. Then A shares what was coming up for them,
+      and B expresses their experience of those facets and what was coming up for them.
+    </p>
+
+    <div class="groundwork-grid">
+      <div class="gw-block">
+        <h3>Phase 1 &mdash; Attachment &amp; Regulation</h3>
+        <ul>
+          <li>Attend to feelings and needs</li>
+          <li>Being seen, being understood</li>
+          <li>Making amends, attending to needs</li>
+        </ul>
+        <div class="goal">Goal: feel safe, seen, soothed, and understood.</div>
+      </div>
+
+      <div class="gw-block">
+        <h3>Phase 2 &mdash; Collaborating &amp; Mutual Care</h3>
+        <ul>
+          <li>How do we address these needs?</li>
+          <li>Negotiate solutions that feel like a win to both</li>
+          <li>Outcome may not be what either initially expected</li>
+        </ul>
+        <div class="goal">Goal: a shared solution &mdash; help each other remember and maintain it.</div>
+      </div>
+
+      <div class="gw-block">
+        <h3>Reminders</h3>
+        <ul>
+          <li>Reflect before responding</li>
+          <li>Understand first, then react</li>
+          <li>Commitments live in relationship, not in a vacuum</li>
+        </ul>
+        <div class="goal">Tend the ground before planting.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="moves-label">Menu of Helpful Moves</div>
+<div class="button-grid" id="buttonGrid"></div>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal" id="modal">
+    <button class="close" id="modalClose" aria-label="Close">Close</button>
+    <h2 id="modalTitle"></h2>
+    <p class="subtitle" id="modalSubtitle"></p>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  const moves = [
+    {
+      id: "check-in",
+      label: "Check-in Questions",
+      hint: "Open the conversation",
+      subtitle: "Questions for taking each other's temperature before going deeper.",
+      body: `
+        <div class="placeholder">Add your check-in questions here.</div>
+      `
+    },
+    {
+      id: "grice",
+      label: "Grice's Maxims",
+      hint: "Cooperative communication",
+      subtitle: "Four maxims of cooperative conversation (H. P. Grice).",
+      body: `
+        <h3>The Four Maxims</h3>
+        <ul>
+          <li><strong>Quantity</strong> &mdash; say as much as is needed, no more, no less.</li>
+          <li><strong>Quality</strong> &mdash; only say what you believe to be true and have evidence for.</li>
+          <li><strong>Relation</strong> &mdash; stay relevant to the topic at hand.</li>
+          <li><strong>Manner</strong> &mdash; be clear, brief, and orderly; avoid ambiguity.</li>
+        </ul>
+        <h3>How to use it</h3>
+        <p>When a conversation feels tangled, ask which maxim is being strained. Are you saying too much? Speculating? Going off-topic? Being unclear?</p>
+        <div class="placeholder">Add your own examples and prompts here.</div>
+      `
+    },
+    {
+      id: "view",
+      label: "VIEW",
+      hint: "Art of Accomplishment",
+      subtitle: "Vulnerability, Impartiality, Empathy, Wonder (Joe Hudson).",
+      body: `
+        <h3>VIEW</h3>
+        <ul>
+          <li><strong>V &mdash; Vulnerability:</strong> share what's actually true for you, including the parts you'd rather hide.</li>
+          <li><strong>I &mdash; Impartiality:</strong> drop the agenda; be willing for any outcome.</li>
+          <li><strong>E &mdash; Empathy:</strong> feel <em>with</em> the other person, not <em>at</em> them.</li>
+          <li><strong>W &mdash; Wonder:</strong> stay curious; assume there's more to discover.</li>
+        </ul>
+        <div class="placeholder">Add prompts, examples, or your own framing here.</div>
+      `
+    },
+    {
+      id: "resent-fear",
+      label: "I resent X, because I fear Y",
+      hint: "Naming the fear under the resentment",
+      subtitle: "A frame for surfacing what's underneath a complaint.",
+      body: `
+        <h3>The frame</h3>
+        <blockquote>"I resent <em>X</em>, because I have a fear that <em>Y</em>."</blockquote>
+        <p>Resentment is often a defended fear. Naming the fear directly turns a complaint into a vulnerability,
+        which is something the other person can actually meet.</p>
+        <h3>Examples</h3>
+        <ul>
+          <li>"I resent that you were late, because I fear I don't matter to you."</li>
+          <li>"I resent that you didn't ask my opinion, because I fear I'm becoming invisible to you."</li>
+        </ul>
+        <div class="placeholder">Add your own examples or variations here.</div>
+      `
+    },
+    {
+      id: "four-questions",
+      label: "The Four Questions",
+      hint: "The Work of Byron Katie",
+      subtitle: "Questions for inquiring into a stressful thought.",
+      body: `
+        <h3>Pick a stressful thought, then ask:</h3>
+        <ol>
+          <li>Is it true?</li>
+          <li>Can you absolutely know that it's true?</li>
+          <li>How do you react &mdash; what happens &mdash; when you believe that thought?</li>
+          <li>Who would you be without the thought?</li>
+        </ol>
+        <h3>Then turn the thought around</h3>
+        <p>Find ways the opposite could be as true or truer. (To self, to other, to opposite.) For each, find three genuine examples.</p>
+        <div class="placeholder">Add a worked example or your own notes here.</div>
+      `
+    },
+    {
+      id: "focusing",
+      label: "Focusing",
+      hint: "Felt-sense practice (Gendlin)",
+      subtitle: "Listening to the body's bodily-felt sense of a situation.",
+      body: `
+        <h3>Six-step sketch</h3>
+        <ol>
+          <li><strong>Clearing a space</strong> &mdash; set what's there to the side, gently.</li>
+          <li><strong>Felt sense</strong> &mdash; let one issue come; sense it in the body, not in words.</li>
+          <li><strong>Handle</strong> &mdash; find a word, image, or phrase that fits the felt sense.</li>
+          <li><strong>Resonating</strong> &mdash; check the handle against the felt sense; adjust until it fits.</li>
+          <li><strong>Asking</strong> &mdash; ask the felt sense, "what is it about this whole thing that makes me feel this way?"</li>
+          <li><strong>Receiving</strong> &mdash; welcome whatever comes, even small shifts.</li>
+        </ol>
+        <div class="placeholder">Add your own prompts or shorthand here.</div>
+      `
+    },
+    {
+      id: "bio-emotive",
+      label: "Bio-Emotive Core Feelings",
+      hint: "Naming the underlying feeling",
+      subtitle: "Core feelings as a vocabulary for what's actually present.",
+      body: `
+        <h3>Core feelings (working list)</h3>
+        <ul>
+          <li>Sad / hurt</li>
+          <li>Scared</li>
+          <li>Angry</li>
+          <li>Ashamed</li>
+          <li>Lonely</li>
+          <li>Helpless / powerless</li>
+          <li>Guilty</li>
+          <li>Disgusted</li>
+          <li>Joyful / loved</li>
+        </ul>
+        <p>The move: under the story, under the resentment, under the analysis &mdash; which of these is actually here right now?</p>
+        <div class="placeholder">Add the full list and your preferred framing here.</div>
+      `
+    },
+    {
+      id: "weakness-spiral",
+      label: "Weakness / Self-Absorption Spiral",
+      hint: "Naming the spiral",
+      subtitle: "Recognizing when shame collapses into self-focus.",
+      body: `
+        <h3>The pattern</h3>
+        <p>A perceived weakness or failure triggers shame. Shame turns attention inward.
+        Self-focus then crowds out the other person &mdash; their feelings, their needs, the actual situation &mdash;
+        which deepens the sense of failure, which deepens the spiral.</p>
+        <h3>Signs you're in it</h3>
+        <ul>
+          <li>You're rehearsing what you should have said or done.</li>
+          <li>You can't actually hear the other person right now.</li>
+          <li>The conversation is starting to feel like it's about you, not about what's between you.</li>
+        </ul>
+        <h3>The exit</h3>
+        <p>Name it out loud. "I notice I'm spiraling into self-focus right now." Re-orient outward.</p>
+        <div class="placeholder">Replace this with your own description and exits.</div>
+      `
+    }
+  ];
+
+  const grid = document.getElementById("buttonGrid");
+  moves.forEach((m, i) => {
+    const btn = document.createElement("button");
+    btn.className = "move-btn";
+    btn.type = "button";
+    btn.innerHTML = `
+      <div class="label">${m.label}</div>
+      <div class="hint">${m.hint}</div>
+      <div class="tap-hint" aria-hidden="true">Tap to explore <span class="arrow">→</span></div>
+    `;
+    btn.addEventListener("click", () => openModal(m));
+    grid.appendChild(btn);
+  });
+
+  const backdrop = document.getElementById("modalBackdrop");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalSubtitle = document.getElementById("modalSubtitle");
+  const modalBody = document.getElementById("modalBody");
+  const modalClose = document.getElementById("modalClose");
+
+  function openModal(m) {
+    modalTitle.textContent = m.label;
+    modalSubtitle.textContent = m.subtitle || "";
+    modalBody.innerHTML = m.body || "";
+    backdrop.classList.add("open");
+    modalClose.focus();
+  }
+  function closeModal() { backdrop.classList.remove("open"); }
+
+  modalClose.addEventListener("click", closeModal);
+  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) closeModal(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+</script>
+</body>
+</html>
