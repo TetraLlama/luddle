@@ -3,20 +3,27 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Conversation Dashboard</title>
+<title>Luddle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f4f1ec;
-    --panel: #ffffff;
-    --ink: #1f2430;
-    --muted: #5b6473;
-    --line: #e3ddd2;
-    --accent: #6b8e7f;
-    --accent-ink: #2d4a3e;
-    --button-face: #fafafa;
-    --button-edge: #d6cfc1;
-    --button-shadow: rgba(40, 30, 20, 0.18);
-    --modal-backdrop: rgba(20, 24, 30, 0.45);
+    --bg: #f7f0ee;
+    --bg-deep: #ede2df;
+    --panel: #fffbfa;
+    --ink: #2a2025;
+    --muted: #7a6068;
+    --line: #e8dbd8;
+    --accent: #b07878;
+    --accent-ink: #6b3535;
+    --accent-soft: #d4a8a8;
+    --button-face: #fdf9f8;
+    --button-edge: #ddd0cc;
+    --button-shadow: rgba(80, 30, 30, 0.12);
+    --modal-backdrop: rgba(40, 20, 25, 0.5);
+    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --sans: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
 
   * { box-sizing: border-box; }
@@ -24,10 +31,17 @@
   html, body {
     margin: 0;
     padding: 0;
-    background: var(--bg);
     color: var(--ink);
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--sans);
     line-height: 1.5;
+  }
+  body {
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, #fbeae5 0%, transparent 70%),
+      radial-gradient(ellipse 60% 80% at 100% 100%, #f5dfdc 0%, transparent 60%),
+      var(--bg);
+    background-attachment: fixed;
+    min-height: 100vh;
   }
 
   .wrap {
@@ -36,14 +50,72 @@
     padding: 18px 24px 18px;
   }
 
+  header {
+    text-align: center;
+    margin-bottom: 18px;
+  }
   header h1 {
-    font-size: 1.25rem;
-    margin: 0 0 2px;
-    letter-spacing: 0.2px;
+    font-family: var(--serif);
+    font-size: 2.6rem;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: -0.5px;
+    color: var(--accent-ink);
+    line-height: 1;
+  }
+  header h1 .etymology {
+    display: block;
+    font-family: var(--serif);
+    font-size: 0.78rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-top: 4px;
   }
   header p {
-    margin: 0 0 12px;
+    margin: 8px 0 0;
     color: var(--muted);
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+
+  /* Epigraph */
+  .epigraph {
+    margin: 0 0 28px;
+    padding: 4px 0 0;
+    position: relative;
+  }
+  .epigraph::before,
+  .epigraph::after {
+    content: "";
+    display: block;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--line), transparent);
+    margin: 0 auto;
+    width: 60%;
+  }
+  .epigraph::before { margin-bottom: 18px; }
+  .epigraph::after { margin-top: 18px; }
+  .epigraph .question {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent-ink);
+    margin: 0 0 12px;
+    line-height: 1.3;
+    text-align: center;
+    letter-spacing: -0.2px;
+  }
+  .epigraph .framing {
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.65;
+    text-align: center;
+    margin: 0 auto;
+    max-width: 720px;
+    text-wrap: balance;
   }
 
   /* Groundwork panel */
@@ -57,7 +129,11 @@
   }
   .groundwork h2 {
     margin: 0 0 4px;
-    font-size: 1.05rem;
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--accent-ink);
+    letter-spacing: -0.2px;
   }
   .groundwork .lede {
     color: var(--muted);
@@ -68,9 +144,11 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
+    max-width: 760px;
+    margin: 0 auto;
   }
-  @media (min-width: 760px) {
-    .groundwork-grid { grid-template-columns: 1fr 1fr 1fr; }
+  @media (min-width: 600px) {
+    .groundwork-grid { grid-template-columns: 1fr 1fr; }
   }
   .gw-block {
     background: #fbfaf6;
@@ -80,11 +158,12 @@
     font-size: 0.88rem;
   }
   .gw-block h3 {
-    margin: 0 0 5px;
-    font-size: 0.78rem;
+    margin: 0 0 6px;
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--accent-ink);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
+    letter-spacing: 0;
   }
   .gw-block ul {
     margin: 0;
@@ -99,12 +178,12 @@
 
   /* Buttons grid */
   .moves-label {
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.8px;
-    color: var(--ink);
-    margin: 4px 0 10px;
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -0.2px;
+    color: var(--accent-ink);
+    margin: 12px 0 14px;
     text-align: center;
   }
   .button-grid {
@@ -172,10 +251,12 @@
     transform: translateX(3px);
   }
   .move-btn .label {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-top: 6px;
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin-top: 0;
     transition: color 150ms ease;
+    letter-spacing: -0.1px;
   }
   .move-btn:hover .label {
     color: var(--accent-ink);
@@ -234,11 +315,17 @@
   }
   .modal h2 {
     margin: 0 0 4px;
-    font-size: 1.35rem;
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--accent-ink);
+    letter-spacing: -0.3px;
   }
   .modal .subtitle {
     color: var(--muted);
     margin: 0 0 18px;
+    font-style: italic;
+    font-size: 0.92rem;
   }
   .modal .close {
     float: right;
@@ -252,11 +339,12 @@
   }
   .modal .close:hover { color: var(--ink); border-color: var(--ink); }
   .modal h3 {
-    margin: 18px 0 6px;
-    font-size: 1rem;
+    margin: 20px 0 8px;
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 600;
     color: var(--accent-ink);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
+    letter-spacing: 0;
   }
   .modal p { margin: 0 0 10px; }
   .modal ul, .modal ol { margin: 6px 0 12px; padding-left: 22px; }
@@ -282,9 +370,14 @@
 <body>
 <div class="wrap">
   <header>
-    <h1>Conversation Dashboard</h1>
-    <p>Moves for deep, emotional, or challenging conversations.</p>
+    <h1>Luddle <span class="etymology">love + huddle</span></h1>
+    <p>A dashboard for deep, emotional, or challenging conversations.</p>
   </header>
+
+  <div class="epigraph">
+    <p class="question">"Who can you be when you're with me?"</p>
+    <p class="framing">More fundamental than any technique or framework is the intention you hold for the conversation. Can you hold space for this person to be fully seen, heard, and understood? Can you let them show up completely, express themselves freely, and feel genuinely supported? That quality of presence is what makes everything else possible.</p>
+  </div>
 
   <section class="groundwork" aria-labelledby="gw-title">
     <h2 id="gw-title">Groundwork of Understanding</h2>
@@ -315,15 +408,6 @@
         <div class="goal">Goal: a shared solution &mdash; help each other remember and maintain it.</div>
       </div>
 
-      <div class="gw-block">
-        <h3>Reminders</h3>
-        <ul>
-          <li>Reflect before responding</li>
-          <li>Understand first, then react</li>
-          <li>Commitments live in relationship, not in a vacuum</li>
-        </ul>
-        <div class="goal">Tend the ground before planting.</div>
-      </div>
     </div>
   </section>
 
@@ -348,7 +432,13 @@
       hint: "Open the conversation",
       subtitle: "Questions for taking each other's temperature before going deeper.",
       body: `
-        <div class="placeholder">Add your check-in questions here.</div>
+        <ol>
+          <li>What did I feel?</li>
+          <li>What did I assume?</li>
+          <li>What are 3 other possibilities?</li>
+          <li>What might the other person have felt?</li>
+          <li>What don't I know yet?</li>
+        </ol>
       `
     },
     {
@@ -372,22 +462,34 @@
     {
       id: "view",
       label: "VIEW",
-      hint: "Art of Accomplishment",
+      hint: "How/What Questions",
       subtitle: "Vulnerability, Impartiality, Empathy, Wonder (Joe Hudson).",
       body: `
         <h3>VIEW</h3>
+        <p>A state of mind to approach conversations from &mdash; not a technique.</p>
         <ul>
-          <li><strong>V &mdash; Vulnerability:</strong> share what's actually true for you, including the parts you'd rather hide.</li>
-          <li><strong>I &mdash; Impartiality:</strong> drop the agenda; be willing for any outcome.</li>
-          <li><strong>E &mdash; Empathy:</strong> feel <em>with</em> the other person, not <em>at</em> them.</li>
-          <li><strong>W &mdash; Wonder:</strong> stay curious; assume there's more to discover.</li>
+          <li><strong>V &mdash; Vulnerability</strong></li>
+          <li><strong>I &mdash; Impartiality</strong></li>
+          <li><strong>E &mdash; Empathy</strong></li>
+          <li><strong>W &mdash; Wonder</strong></li>
         </ul>
-        <div class="placeholder">Add prompts, examples, or your own framing here.</div>
+        <blockquote>"How do I look at this with wonder, empathy, vulnerability, and impartiality?"</blockquote>
+        <h3>How/What Questions</h3>
+        <p>Replace "Why" questions &mdash; which often sound and feel accusatory &mdash; with open-ended "How" or "What" questions.</p>
+        <p>"Why" closes things down. "How/What" opens things up.</p>
+        <ul>
+          <li>"Why are you so upset?" &rarr; <strong>"What's coming up for you right now?"</strong></li>
+          <li>"Why didn't you tell me?" &rarr; <strong>"What made it hard to bring this up?"</strong></li>
+          <li>"Why do you always do that?" &rarr; <strong>"What's going on for you when that happens?"</strong></li>
+          <li>"Why can't you just move on?" &rarr; <strong>"What would feel like enough right now?"</strong></li>
+          <li>"Why does this bother you so much?" &rarr; <strong>"What does this bring up for you?"</strong></li>
+          <li>"Why are you being like this?" &rarr; <strong>"How are you feeling right now?"</strong></li>
+        </ul>
       `
     },
     {
       id: "resent-fear",
-      label: "I resent X, because I fear Y",
+      label: "I am resentful at...because I have fear...",
       hint: "Naming the fear under the resentment",
       subtitle: "A frame for surfacing what's underneath a complaint.",
       body: `
@@ -442,44 +544,53 @@
     {
       id: "bio-emotive",
       label: "Bio-Emotive Core Feelings",
-      hint: "Naming the underlying feeling",
-      subtitle: "Core feelings as a vocabulary for what's actually present.",
+      hint: "Douglas Tataryn",
+      subtitle: "Bio-Emotive Framework — nine core feelings as a vocabulary for what's actually present.",
       body: `
-        <h3>Core feelings (working list)</h3>
+        <h3>The practice</h3>
+        <p>Sit quietly and say <strong>"I feel ___"</strong> out loud &mdash; to yourself or a partner &mdash; two or three times for each feeling. Your body will reverberate when you land on the right one. Allow it to get bigger. Notice any memories or images that arise.</p>
+        <p>Saying it out loud matters: verbalizing reconnects parts of the brain that become disconnected. It also gives you the experience of being <em>allowed</em> to say what you feel &mdash; something many of us were denied.</p>
+        <h3>The nine core feelings</h3>
         <ul>
-          <li>Sad / hurt</li>
-          <li>Scared</li>
-          <li>Angry</li>
-          <li>Ashamed</li>
-          <li>Lonely</li>
-          <li>Helpless / powerless</li>
-          <li>Guilty</li>
-          <li>Disgusted</li>
-          <li>Joyful / loved</li>
+          <li>Lost / Disoriented</li>
+          <li>Helpless</li>
+          <li>Insignificant</li>
+          <li>Bad</li>
+          <li>Empty / A Loss</li>
+          <li>Inadequate</li>
+          <li>Alone</li>
+          <li>Worthless</li>
+          <li>Hopeless</li>
         </ul>
-        <p>The move: under the story, under the resentment, under the analysis &mdash; which of these is actually here right now?</p>
-        <div class="placeholder">Add the full list and your preferred framing here.</div>
+        <p>Under the story, the resentment, the analysis &mdash; which of these is actually here right now?</p>
       `
     },
     {
       id: "weakness-spiral",
       label: "Weakness / Self-Absorption Spiral",
-      hint: "Naming the spiral",
-      subtitle: "Recognizing when shame collapses into self-focus.",
+      hint: "Transformative Mediation",
+      subtitle: "From Bush & Folger's Transformative Mediation approach.",
       body: `
-        <h3>The pattern</h3>
-        <p>A perceived weakness or failure triggers shame. Shame turns attention inward.
-        Self-focus then crowds out the other person &mdash; their feelings, their needs, the actual situation &mdash;
-        which deepens the sense of failure, which deepens the spiral.</p>
+        <h3>The spiral</h3>
+        <p>Conflict destabilizes both people &mdash; making each feel more vulnerable (<em>weakness</em>) and more focused on themselves (<em>self-absorption</em>). These feed each other in a vicious circle:</p>
+        <ul>
+          <li>Feeling weak leads to suspicion and alienation from the other person</li>
+          <li>That alienation leads to a more hostile stance</li>
+          <li>Which reinforces the other person's sense of weakness and self-absorption</li>
+          <li>Which deepens the conflict &mdash; and so on</li>
+        </ul>
         <h3>Signs you're in it</h3>
         <ul>
-          <li>You're rehearsing what you should have said or done.</li>
-          <li>You can't actually hear the other person right now.</li>
-          <li>The conversation is starting to feel like it's about you, not about what's between you.</li>
+          <li>You're rehearsing what you should have said or done</li>
+          <li>You can't actually hear the other person right now</li>
+          <li>The conversation feels like it's about you, not about what's between you</li>
         </ul>
-        <h3>The exit</h3>
-        <p>Name it out loud. "I notice I'm spiraling into self-focus right now." Re-orient outward.</p>
-        <div class="placeholder">Replace this with your own description and exits.</div>
+        <h3>The two exits</h3>
+        <ul>
+          <li><strong>Empowerment shift</strong> &mdash; moving from weakness back to self-confidence and clarity</li>
+          <li><strong>Recognition shift</strong> &mdash; moving from self-absorption back to openness and responsiveness to the other</li>
+        </ul>
+        <p>Name it out loud: <em>"I notice I'm in the spiral right now."</em> That alone can begin the shift.</p>
       `
     }
   ];
