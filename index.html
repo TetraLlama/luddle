@@ -97,6 +97,32 @@
   }
   .epigraph::before { margin-bottom: 12px; }
   .epigraph::after { margin-top: 12px; }
+  .epigraph .pullquote {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--accent);
+    text-align: center;
+    margin: 14px auto 0;
+    line-height: 1.4;
+  }
+  .epigraph .pullquote .attribution {
+    display: block;
+    font-style: normal;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+  }
+  .epigraph .pullquote .attribution a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 150ms ease;
+  }
+  .epigraph .pullquote .attribution a:hover {
+    border-bottom-color: var(--accent);
+  }
   .epigraph .question {
     font-family: var(--serif);
     font-size: 1.4rem;
@@ -377,6 +403,7 @@
   <div class="epigraph">
     <p class="question">"Who can you be when you're with me?"</p>
     <p class="framing">More fundamental than any technique or framework is the intention you hold for the conversation.<br>Am I creating the conditions for you to show up as your full, authentic self?<br>Have I made room for you to freely express what you actually think and feel?<br>Am I genuinely open to what you share?</p>
+    <p class="pullquote">"Regulating your partner is the royal road to success."<span class="attribution">&mdash; <a href="https://www.evanleed.com/" target="_blank" rel="noopener noreferrer">Evan Leed</a></span></p>
   </div>
 
   <section class="groundwork" aria-labelledby="gw-title">
